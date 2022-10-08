@@ -12,19 +12,19 @@
         state=present
         gid=1001
  
-- name: Install pre-reqs
-  yum: name={{ item }}
-  loop:
-    - epel-release
-    - centos-release-scl
-    - yum-plugin-versionlock
-    - java-{{ java_version }}
-    - autoconf
+# - name: Install pre-reqs
+#   yum: name={{ item }}
+#   loop:
+#     - epel-release
+#     - centos-release-scl
+#     - yum-plugin-versionlock
+#     - java-{{ java_version }}
+#     - autoconf
  
-- name: Install boto and botocore
-  pip:
-   name: ['boto3', 'botocore', 'awscli']
-   state: present
+# - name: Install boto and botocore
+#   pip:
+#    name: ['boto3', 'botocore', 'awscli']
+#    state: present
  
 - name: Create confluence home directory
   file:

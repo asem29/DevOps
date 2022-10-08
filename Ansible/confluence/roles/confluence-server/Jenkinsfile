@@ -1,0 +1,22 @@
+pipeline {
+ agent {
+   label 'packer'
+ }
+  environment {
+     AWS_REGION = 'us-east-1'
+     AWS_DEFAULT_REGION = 'us-east-1'
+ }
+ stages {
+   stage('Run the Confluence-server Role Playbook') {
+     parallel {
+       stage('confluence-server-provisioning') {
+         steps {
+               sh "cd $WORKSPACE/plays; /bin/ansible-playbook confluence-server.yml -b --limit 01UE1 -i ../ec2.py"
+         }
+       }
+     }
+   }
+ }
+}
+ 
+

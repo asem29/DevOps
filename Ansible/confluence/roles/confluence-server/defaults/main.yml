@@ -1,0 +1,22 @@
+---
+# defaults file for confluence-server
+#versions
+# Environment specific variables are defined in the confluence-server.yml file
+confluence_url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-{{ confluence_version }}.tar.gz
+confluence_install_directory: atlassian-confluence-{{ confluence_version }}
+java_version: 1.8.0
+ 
+
+ 
+#confluence Vars
+mssql_port_number: 1433
+confluence_jdbc_driver: com.microsoft.sqlserver.jdbc.SQLServerDriver
+jvm_memory_min: 8g
+jvm_memory_max: 8g
+confluence_home_directory: /Users/asemamr/Desktop/confluence/data
+confluence_plugin_directory: "{{ confluence_home_directory }}/plugins/installed-plugins"
+#confluence_license_key: "{{ vault_confluence_license_key }}"
+#confluence_server_id: BLHV-EGV6-AR02-YWDC
+#confluence_jwt_private_key: "{{ vault_confluence_jwt_private_key }}"
+#confluence_jwt_public_key: 
+

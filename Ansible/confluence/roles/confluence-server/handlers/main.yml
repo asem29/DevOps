@@ -1,0 +1,12 @@
+---
+# handlers file for confluence-server
+- name: mount nfs
+  shell: mount -a
+ 
+- name: restart confluence
+  service:
+   name: confluence
+   state: restarted
+   enabled: yes
+ 
+

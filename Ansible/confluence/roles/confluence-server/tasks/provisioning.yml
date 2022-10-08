@@ -1,0 +1,83 @@
+# tasks file for bitbucket
+- name: Check if atlassian directory exists
+  stat: path=/opt/atlassian
+  register: atlassian_is_installed
+ 
+- name: Create confluence user
+  user: name=confluence
+       uid=1001
+ 
+- name: Create confluence group
+  group: name=confluence
+        state=present
+        gid=1001
+ 
+- name: Install pre-reqs
+  yum: name={{ item }}
+  loop:
+    - epel-release
+    - centos-release-scl
+    - yum-plugin-versionlock
+    - java-{{ java_version }}
+    - autoconf
+ 
+- name: Install boto and botocore
+  pip:
+   name: ['boto3', 'botocore', 'awscli']
+   state: present
+ 
+- name: Create confluence home directory
+  file:
+   path: /data/confluence
+   state: directory
+   owner: confluence
+   group: confluence
+   mode: 0755
+ 
+- name: Create confluence installation directory
+  file:
+   path: /opt/atlassian/
+   state: directory
+   owner: confluence
+   group: confluence
+   mode: 0755
+ 
+- name: Create confluence plugins directory
+  file:
+   path: "{{ confluence_plugin_directory }}"
+   state: directory
+   owner: confluence
+   group: confluence
+   mode: 0755
+ 
+# Security Notes - There is currently no available method to get a SHA256 checksum for the downloaded file. Refer to https://jira.atlassian.com/browse/CONFCLOUD-25687
+# This potentially could become a requirement down the line
+- name: Get confluence tarball from Atlassian
+  get_url:
+   url: "{{ confluence_url }}"
+   dest: "/tmp/{{ confluence_url | basename }}"
+  register: gettarball
+ 
+#- name: Get installer from s3
+#  aws_s3:
+#    bucket: "{{ s3_download_bucket }}"
+#    object: "/artifacts/{{ s3_object_key }}{{ s3_extension_type }}"
+#    dest: "/tmp/{{ s3_object_key }}{{ s3_extension_type }}"
+#    mode: get
+ 
+- name: Unarchive the git tarball
+  unarchive:
+   src: "/tmp/{{ confluence_url | basename }}"
+   dest: /opt/atlassian/
+   remote_src: yes
+   owner: confluence
+   group: confluence
+  when: gettarball is changed
+ 
+- name: Symlink extracted directory to confluence - this allows for performing in place upgrades by upgrading the symlink
+  file:
+   src: "/opt/atlassian/{{ confluence_install_directory }}"
+   dest: /opt/atlassian/confluence
+   state: link
+ 
+

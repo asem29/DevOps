@@ -1,0 +1,10 @@
+# tasks file for confluence-server
+- name: Include provisioning step
+  include_tasks: provisioning.yml
+  tags: provisioning
+ 
+- name: Include configs step
+  include_tasks: configs.yml
+  tags: configs
+ 
+

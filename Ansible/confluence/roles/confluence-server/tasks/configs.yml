@@ -1,0 +1,72 @@
+---
+# Configs for confluence-server
+- name: Configure confluence-application.properties
+  template:
+   src: confluence-init.properties.j2
+   dest: /opt/atlassian/confluence/confluence/WEB-INF/classes/confluence-init.properties
+   owner: confluence
+   group: confluence
+   mode: 0644
+   backup: yes
+  notify: restart confluence
+ 
+# - name: Configure server.xml
+#   template:
+#   src: server.xml.j2
+#   dest: /opt/atlassian/confluence/conf/server.xml
+#   owner: confluence
+#   group: confluence
+#   mode: 0644
+#   backup: yes
+#   notify: restart confluence
+ 
+# - name: Configure database config xml
+#   template:
+#    src: confluence.cfg.xml.j2
+#    dest: "{{ confluence_home_directory }}/confluence.cfg.xml"
+#    owner: confluence
+#    group: confluence
+#    mode: 0640
+#    backup: yes
+#   notify: restart confluence
+ 
+# - name: Use XML module to set values - no_log is enabled to prevent license keys from being logged in stdout
+#   xml:
+#    path: "{{ confluence_home_directory }}/confluence.cfg.xml"
+#    xpath: "/confluence-configuration/properties/property[@name='{{ item.name }}']"
+#    value: "{{ item.value }}"
+#   tags: configs
+#   no_log: true
+#   loop:
+#     - { name: "confluence.setup.server.id", value: "{{ confluence_server_id }}" }
+#     - { name: "atlassian.license.message", value: "{{ confluence_license_key }}" }
+#     - { name: "hibernate.connection.password", value: "{{ confluence_db_password }}" }
+#     - { name: "hibernate.connection.url", value: "jdbc:sqlserver://{{ confluence_db_sql_host }}:1433;databaseName={{ confluence_database_name }}" }
+#     - { name: "hibernate.connection.username", value: "{{ confluence_db_user }}" }
+#     - { name: "jwt.private.key", value: "{{ confluence_jwt_private_key }}" }
+#     - { name: "jwt.public.key", value: "{{ confluence_jwt_public_key }}" }
+#   notify: restart confluence
+ 
+- name: Configure setenv.sh
+  template:
+   src: setenv.sh.j2
+   dest: /opt/atlassian/confluence/bin/setenv.sh
+   owner: confluence
+   group: confluence
+   mode: 0755
+   backup: yes
+  notify: restart confluence
+  tags: configs
+ 
+- name: Create confluence service file
+  copy:
+   src: confluence.service
+   dest: /etc/systemd/system
+ 
+- name: Enable confluence service
+  service:
+   name: confluence.service
+   enabled: yes
+   state: started
+ 
+

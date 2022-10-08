@@ -4,12 +4,8 @@
  - hosts: localhost
    vars:
      - confluence_version: 7.4.1
-     - confluence_db_sql_host: localhost
      - confluence_build_number: 8401
-     - confluence_database_name: confluence_production
-     - confluence_db_user: confluencedbuser
      - confluence_dns_name: confluence.com
-     - confluence_db_password: "admin"
    roles:
     - confluence-server
  

@@ -8,3 +8,5 @@ Prerequisite:
 
 Then you need to adjust the reciver mail in destination.json and the location of both files (destination.json, message.json)
 need to be added in fetch-openfile.sh
+
+The idea is to get notified and restart the confluence service. It was temporary solution because we are migrating to cloud.

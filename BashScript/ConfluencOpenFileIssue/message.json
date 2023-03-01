@@ -1,0 +1,16 @@
+{   
+    "Subject": {       
+        "Data": "Confluence Open File Limit Warning",       
+        "Charset": "UTF-8"  
+    },   
+        "Body": {       
+            "Text": {           
+                "Data": "This is the message body in text format.",           
+                "Charset": "UTF-8"      
+        },       
+                "Html": {           
+                    "Data": "The Conluence open file is exceed 12000.The Max number  is 20000",           
+                    "Charset": "UTF-8"      
+        }  
+    }
+}

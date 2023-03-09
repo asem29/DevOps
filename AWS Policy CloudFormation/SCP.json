@@ -1,0 +1,44 @@
+{
+
+	"Resourses": {
+		"SCPPolicyForRegion": {
+			"Type": "AWS::Organizations::Policy",
+			"Condition": "CreateResourceInProductionAccountOnly",
+			"Properties": {
+				"Content": {
+					"Fn::Sub": "{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Effect\": \"Deny\", \"Action\": \"*\", \"Resource\": \"*\", \"Condition\": { \"StringNotEquals\": { \"aws:RequestedRegion\": [ \"us-east-1\", \"us-west-2\" ] } } } ] }"
+				},
+				"Description": "My custom Service Control Policy",
+				"Name": "RegionLimit",
+				"Type": "SERVICE_CONTROL_POLICY",
+				"TargetIds": ["1231321"]
+			}
+		},
+		"SCPPolicyForInstances": {
+			"Type": "AWS::Organizations::Policy",
+			"Condition": "CreateResourceInProductionAccountOnly",
+			"Properties": {
+				"Content": {
+					"Fn::Sub": "{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Sid\": \"RequireInstanceType\", \"Effect\": \"Deny\", \"Action\": \"ec2:RunInstances\", \"Resource\": \"arn:aws:ec2:*:*:instance/*\", \"Condition\": { \"StringLike\": { \"ec2:InstanceType\": \"*xlarge\" } } }, { \"Sid\": \"DenyDBSInstanceType\", \"Effect\": \"Deny\", \"Action\": [ \"rds:CreateDBInstance\", \"rds:CreateDBInstanceReadReplica\", \"docdb:CreateDBInstance\" ], \"Resource\": \"*\", \"Condition\": { \"StringLike\": { \"rds:DatabaseClass\": [ \"*xlarge\" ] } } } ] }"
+				},
+				"Description": "My custom Service Control Policy",
+				"Name": "InstanceLimit",
+				"Type": "SERVICE_CONTROL_POLICY",
+				"TargetIds": ["123123123"]
+			}
+		},
+		"SCPPolicyForSomeServices": {
+			"Type": "AWS::Organizations::Policy",
+			"Condition": "CreateResourceInProductionAccountOnly",
+			"Properties": {
+				"Content": {
+					"Fn::Sub": "{\"Version\":\"2012-10-17\",\"Statement\":{\"Sid\":\"DenyList\",\"Effect\":\"Deny\",\"Action\":[\"elasticmapreduce:*\",\"es:*\",\"neptune-db:*\",\"glue:*\",\"redshift:*\"],\"Resource\":\"*\"}}"
+				},
+				"Description": "My custom Service Control Policy",
+				"Name": "ServicesHighCostLimit",
+				"Type": "SERVICE_CONTROL_POLICY",
+				"TargetIds": ["123123131211"]
+			}
+		}
+	}
+}

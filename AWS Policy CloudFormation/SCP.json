@@ -54,7 +54,9 @@
 					"Description": "My custom Service Control Policy", 
 					"Name": "TaggingPolicy", 
 					"Type": "SERVICE_CONTROL_POLICY", 
-					"TargetIds": ["123123131211"]
+					"TargetIds": [
+						"123123131211"
+				]
 			}
 		}
 

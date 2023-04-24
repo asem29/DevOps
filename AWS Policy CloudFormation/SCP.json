@@ -1,5 +1,4 @@
 {
-
 	"Resourses": {
 		"SCPPolicyForRegion": {
 			"Type": "AWS::Organizations::Policy",
@@ -11,7 +10,9 @@
 				"Description": "My custom Service Control Policy",
 				"Name": "RegionLimit",
 				"Type": "SERVICE_CONTROL_POLICY",
-				"TargetIds": ["1231321"]
+				"TargetIds": [
+					"1231321"
+				]
 			}
 		},
 		"SCPPolicyForInstances": {
@@ -24,7 +25,9 @@
 				"Description": "My custom Service Control Policy",
 				"Name": "InstanceLimit",
 				"Type": "SERVICE_CONTROL_POLICY",
-				"TargetIds": ["123123123"]
+				"TargetIds": [
+					"123123123"
+				]
 			}
 		},
 		"SCPPolicyForSomeServices": {
@@ -37,8 +40,23 @@
 				"Description": "My custom Service Control Policy",
 				"Name": "ServicesHighCostLimit",
 				"Type": "SERVICE_CONTROL_POLICY",
-				"TargetIds": ["123123131211"]
+				"TargetIds": [
+					"123123131211"
+				]
+			}
+		},
+		"SCPPolicyForTagging": {
+			"Type": "AWS::Organizations::Policy",
+			"Properties": {
+				"Content": {
+					"Fn::Sub": "{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Sid\": \"DenyRunInstanceWithNoProjectTag\", \"Effect\": \"Deny\", \"Action\": [\"ec2:RunInstances\",\"eks:CreateCluster\",\"ecs:CreateCluster\"], \"Resource\": [ \"arn:aws:ec2:*:*:instance/*\", \"arn:aws:ec2:*:*:volume/*\", \"arn:aws:eks:*:*:cluster/*\", \"arn:aws:ecs:*:*:cluster/*\" ], \"Condition\": { \"Null\": { \"aws:RequestTag/Project\": \"true\" } } } ] }"
+				}, 
+					"Description": "My custom Service Control Policy", 
+					"Name": "TaggingPolicy", 
+					"Type": "SERVICE_CONTROL_POLICY", 
+					"TargetIds": ["123123131211"]
 			}
 		}
+
 	}
 }
